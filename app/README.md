@@ -1,0 +1,1 @@
+A duolingo clone developed in Ruby on Rails.
