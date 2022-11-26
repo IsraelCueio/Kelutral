@@ -1,0 +1,17 @@
+<%= form_with(model: phrase_translation) do |form| %>
+  <% if phrase_translation.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(phrase_translation.errors.count, "error") %> prohibited this phrase_translation from being saved:</h2>
+
+      <ul>
+        <% phrase_translation.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

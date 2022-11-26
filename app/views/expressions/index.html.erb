@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Expressions</h1>
+
+<div id="expressions">
+  <% @expressions.each do |expression| %>
+    <%= render expression %>
+    <p>
+      <%= link_to "Show this expression", expression %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New expression", new_expression_path %>

@@ -1,0 +1,17 @@
+<% if current_user %>
+    <h1>Welcome</h1>
+    <p>I see you</p>
+    <p>Hello <%= current_user.name%>! </p>
+    <% if current_user.admin == true %>
+        <p> You are an Admin </p>
+    <% end %>
+    <p> You have sucessfully autheticated with your account.</p>
+    <%= link_to "Sign_out", destroy_user_session_path, 'data-turbo-method': :delete%>
+
+<% else %>
+
+    <p>Sign in to start learning!</p>
+    <%= link_to "Sign-up!", new_user_registration_path %>
+    <%= link_to "Login", new_user_session_path %>
+
+<%end%>
