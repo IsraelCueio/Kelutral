@@ -12,6 +12,11 @@
   <% end %>
 
   <div>
+    <%= form.label :word_class_id, style: "display: block" %>
+    <%= form.collection_select :word_class_id, WordClass.order(:id), :id, :name %>
+  </div>
+
+  <div>
     <%= form.label :name, style: "display: block" %>
     <%= form.text_field :name %>
   </div>

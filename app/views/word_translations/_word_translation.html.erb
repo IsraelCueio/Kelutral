@@ -1,2 +1,12 @@
 <div id="<%= dom_id word_translation %>">
+  <p>
+  <p>
+    <strong>Word:</strong>
+    <%= @word.find(word_translation.word_id).name %>
+  </p>
+  <p>
+    <strong>Translation:</strong>
+    <%= word_translation.translation %>
+  </p>
+
 </div>

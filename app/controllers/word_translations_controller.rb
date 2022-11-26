@@ -4,10 +4,13 @@ class WordTranslationsController < ApplicationController
   # GET /word_translations or /word_translations.json
   def index
     @word_translations = WordTranslation.all
+    @word = Word.all
   end
 
   # GET /word_translations/1 or /word_translations/1.json
   def show
+    @word_translations = WordTranslation.all
+    @word = Word.all
   end
 
   # GET /word_translations/new
@@ -65,6 +68,6 @@ class WordTranslationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def word_translation_params
-      params.fetch(:word_translation, {})
+      params.require(:word_translation).permit(:translation, :word_id)
     end
 end

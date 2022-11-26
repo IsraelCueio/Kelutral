@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_25_210113) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_26_165035) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -56,6 +56,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_25_210113) do
     t.bigint "phrase_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "translation"
     t.index ["phrase_id"], name: "index_phrase_translations_on_phrase_id"
   end
 
@@ -109,16 +110,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_25_210113) do
     t.bigint "word_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "translation"
     t.index ["word_id"], name: "index_word_translations_on_word_id"
   end
 
   create_table "words", force: :cascade do |t|
     t.string "name"
     t.string "audio"
-    t.bigint "word_classes_id"
+    t.bigint "word_class_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["word_classes_id"], name: "index_words_on_word_classes_id"
+    t.index ["word_class_id"], name: "index_words_on_word_class_id"
   end
 
   add_foreign_key "exercises", "lessons"
@@ -131,5 +133,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_25_210113) do
   add_foreign_key "reports", "exercises"
   add_foreign_key "reports", "users"
   add_foreign_key "word_translations", "words"
-  add_foreign_key "words", "word_classes", column: "word_classes_id"
+  add_foreign_key "words", "word_classes"
 end

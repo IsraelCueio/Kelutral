@@ -1,13 +1,17 @@
 class WordsController < ApplicationController
   before_action :set_word, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!
 
   # GET /words or /words.json
   def index
     @words = Word.all
+    @word_translations = WordTranslation.all
   end
 
   # GET /words/1 or /words/1.json
   def show
+    @words = Word.all
+    @word_translations = WordTranslation.all
   end
 
   # GET /words/new
@@ -65,6 +69,6 @@ class WordsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def word_params
-      params.require(:word).permit(:name, :audio)
+      params.require(:word).permit(:name, :audio, :word_class_id)
     end
 end

@@ -4,9 +4,17 @@
     <%= word.name %>
   </p>
 
+  <% @translation_filter = @word_translations.where(word_id: word.id) %>
   <p>
-    <strong>Audio:</strong>
-    <%= word.audio %>
+    <strong>Translations:</strong>
+    <% @translation_filter.each do |translation| %>
+      
+      <br>
+      <%= translation.translation %>
+      
+    <% end %>
   </p>
+
+  <%= link_to "Edit Translations", word_translations_path %>
 
 </div>
