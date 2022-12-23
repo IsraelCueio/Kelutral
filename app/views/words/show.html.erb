@@ -2,11 +2,6 @@
 
 <%= render @word %>
 
-<p>
-  <strong>Audio:</strong>
-  <%= word.audio %>
-</p>
-
 <div>
   <%= link_to "Edit this word", edit_word_path(@word) %> |
   <%= link_to "Back to words", words_path %>
