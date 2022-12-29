@@ -12,6 +12,13 @@
   <% end %>
 
   <div>
+    <%= form.label :word_id, style: "display: block" %>
+    <%= form.collection_select :word_id, Word.order(:id), :id, :name, {}, {multiple: true} %>
+  </div>
+
+  <div>
     <%= form.submit %>
   </div>
 <% end %>
+
+<br>

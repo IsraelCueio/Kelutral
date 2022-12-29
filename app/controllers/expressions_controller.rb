@@ -65,6 +65,6 @@ class ExpressionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def expression_params
-      params.fetch(:expression, {})
+      params.require(:expression).permit(:word_id, :phrase_id)
     end
 end
