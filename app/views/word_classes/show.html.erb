@@ -3,8 +3,13 @@
 <%= render @word_class %>
 
 <div>
-  <%= link_to "Edit this word class", edit_word_class_path(@word_class) %> |
-  <%= link_to "Back to word classes", word_classes_path %>
+  <% if @word_class.id != 0%>
+    <%= link_to "Edit this word class", edit_word_class_path(@word_class) %> |
+    <%= link_to "Back to word classes", word_classes_path %>
+  
 
   <%= button_to "Destroy this word class", @word_class, method: :delete %>
+  <% else %>
+    <%= link_to "Back to word classes", word_classes_path %>
+  <% end %>
 </div>

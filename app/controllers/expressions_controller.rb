@@ -12,7 +12,10 @@ class ExpressionsController < ApplicationController
 
   # GET /expressions/new
   def new
+    @words_JSON = Word.all
     @expression = Expression.new
+    @expression.build_phrase
+    @expression.build_word
   end
 
   # GET /expressions/1/edit
@@ -65,6 +68,6 @@ class ExpressionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def expression_params
-      params.require(:expression).permit(:word_id, :phrase_id)
+      params.require(:expression).permit(:word_id, :phrase_id, phrase_attributes: [:difficulty, :audio, :text], word_attributes: [:name, :audio, :word_class_id])
     end
 end

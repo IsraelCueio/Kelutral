@@ -1,6 +1,28 @@
 class WordClassesController < ApplicationController
   before_action :set_word_class, only: %i[ show edit update destroy ]
 
+  def stop_destroy
+    if WordClass.id == 0
+      errors.add(:base, :undestroyable)
+      throw :abort
+      respond_to do |format|
+        format.html { redirect_to word_classes_url, notice: "This class can't be deleted." }
+        format.json { head :no_content }
+      end
+    end
+  end
+
+  def stop_update
+    if WordClass.id == 0
+      errors.add(:word_class, :undestroyable)
+      throw :abort
+      respond_to do |format|
+        format.html { redirect_to word_classes_url, notice: "This class can't be edited." }
+        format.json { head :no_content }
+      end
+    end
+  end
+
   # GET /word_classes or /word_classes.json
   def index
     @word_classes = WordClass.all
@@ -36,13 +58,20 @@ class WordClassesController < ApplicationController
 
   # PATCH/PUT /word_classes/1 or /word_classes/1.json
   def update
-    respond_to do |format|
-      if @word_class.update(word_class_params)
-        format.html { redirect_to word_class_url(@word_class), notice: "Word class was successfully updated." }
-        format.json { render :show, status: :ok, location: @word_class }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @word_class.errors, status: :unprocessable_entity }
+    if @word_class.id != 0
+      respond_to do |format|
+        if @word_class.update(word_class_params)
+          format.html { redirect_to word_class_url(@word_class), notice: "Word class was successfully updated." }
+          format.json { render :show, status: :ok, location: @word_class }
+        else
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @word_class.errors, status: :unprocessable_entity }
+        end
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to word_classes_url, notice: "This class can't be edited" }
+        format.json { head :no_content }
       end
     end
   end
@@ -51,9 +80,17 @@ class WordClassesController < ApplicationController
   def destroy
     @word_class.destroy
 
-    respond_to do |format|
-      format.html { redirect_to word_classes_url, notice: "Word class was successfully destroyed." }
-      format.json { head :no_content }
+    if @word_class.id == 0
+      
+      respond_to do |format|
+        format.html { redirect_to word_classes_url, notice: "This class can't be deleted." }
+        format.json { head :no_content }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to word_classes_url, notice: "Word class was successfully destroyed." }
+        format.json { head :no_content }
+      end
     end
   end
 
