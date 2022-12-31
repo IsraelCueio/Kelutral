@@ -4,10 +4,15 @@ class ExpressionsController < ApplicationController
   # GET /expressions or /expressions.json
   def index
     @expressions = Expression.all
+    @phrases = Phrase.all
+    @words = Word.all
   end
 
   # GET /expressions/1 or /expressions/1.json
   def show
+    @expressions = Expression.all
+    @phrases = Phrase.all
+    @words = Word.all
   end
 
   # GET /expressions/new
@@ -16,6 +21,8 @@ class ExpressionsController < ApplicationController
     @expression = Expression.new
     @expression.build_phrase
     @expression.build_word
+    @phrases = Phrase.all
+    @words = Word.all
   end
 
   # GET /expressions/1/edit
@@ -28,7 +35,7 @@ class ExpressionsController < ApplicationController
 
     respond_to do |format|
       if @expression.save
-        format.html { redirect_to expression_url(@expression), notice: "Expression was successfully created." }
+        format.html { redirect_to expressions_url, notice: "Expression was successfully created." }
         format.json { render :show, status: :created, location: @expression }
       else
         format.html { render :new, status: :unprocessable_entity }

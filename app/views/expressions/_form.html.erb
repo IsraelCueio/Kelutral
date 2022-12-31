@@ -11,32 +11,17 @@
     </div>
   <% end %>
 
-  <%= form.fields_for :word, Word.new do |word_attributes|%>
-      <div>
-        <%= word_attributes.label :name, style: "display: block" %>
-        <%= word_attributes.text_field :name, id: 'teste', :onkeyup => "GetValue(this.value)" %>
-      </div>
-  <% end %>
+  <div>
+    <%= form.label :word_id, style: "display: block" %>
+    <%= form.collection_select :word_id, Word.order(:id), :id, :name %>
+  </div>
 
   <div>
-    <%= form.fields_for :phrase, Phrase.new do |phrase_attributes|%>
-      <div>
-        <%= phrase_attributes.label :text, style: "display: block" %>
-        <%= phrase_attributes.text_field :text, id: 'teste', :onkeyup => "GetValue(this.value,false)", :onblur => "GetValue(this.value,true)" %>
-      </div>
+    <%= form.label :phrase_id, style: "display: block" %>
+    <%= form.collection_select :phrase_id, Phrase.order(:id), :id, :text %>
+  </div>
 
-      <div>
-        <%= phrase_attributes.label :difficulty, style: "display: block" %>
-        <%= phrase_attributes.number_field :difficulty %>
-      </div>
-
-      <div>
-        <%= phrase_attributes.label :audio, style: "display: block" %>
-        <%= phrase_attributes.text_field :audio %>
-      </div>
-
-      <br>
-    <% end %>
+  
   </div>
 
   <div>

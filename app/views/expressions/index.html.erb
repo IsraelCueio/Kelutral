@@ -3,10 +3,10 @@
 <h1>Expressions</h1>
 
 <div id="expressions">
-  <% @expressions.each do |expression| %>
+  <% @expression_filter = @expressions.uniq{|expression| expression.phrase_id} %>
+  <% @expression_filter.each do |expression| %>
     <%= render expression %>
     <p>
-      <%= link_to "Show this expression", expression %>
     </p>
   <% end %>
 </div>

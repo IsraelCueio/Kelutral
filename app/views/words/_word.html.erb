@@ -1,12 +1,8 @@
 <div id="<%= dom_id word %>">
   <p>
-    <strong>Name:</strong>
-    <%= word.name %>
-  </p>
-
-  <p>
-    <strong>Audio:</strong>
-    <%= word.audio %>
+    <strong class="h3">
+      <%= word.name %>
+    </strong>  
   </p>
 
   <% @translation_filter = @word_translations.where(word_id: word.id) %>

@@ -1,2 +1,17 @@
 <div id="<%= dom_id expression %>">
+
+    <p>
+        <strong class="h3"> Phrase: </strong>  
+        <%= @phrases.find(expression.phrase_id).text %>
+    </p>
+
+    <p>
+        <strong class="h5"> Words: </strong> 
+        <% @phrase_expressions = @expressions.where(phrase_id: expression.phrase_id) %>
+        <% @phrase_expressions.each do |phrase_expression| %> 
+            <br>
+            <%= @words.find(phrase_expression.word_id).name %>
+        <% end %>
+    </p>
+
 </div>
