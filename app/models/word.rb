@@ -7,5 +7,6 @@ class Word < ApplicationRecord
 
     def init
       self.word_class_id  ||= 0        #will set the default value only if it's nil
+      self.audio ||= ";)"
     end
 end

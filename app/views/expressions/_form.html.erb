@@ -25,17 +25,14 @@
   <% end %>
 
       <label for="fname">Frase:</label>
-      <input type="text" id="teste" onkeyup="GetValue(this.value,false)" onblur="GetValue(this.value,true)"><br><br>
+      <input type="text" id="teste" onkeydown="GetValue(this.value,event,false)" onblur="GetValue(this.value,event,true)"><br><br>
 
       <div>
-        <%= form.hidden_field :word_json %>
         <%= form.hidden_field :word_json, id: 'json_sender' %>
       <div>
-  <% if false %>
     <%= form.fields_for :word, Word.new do |word_attributes|%>
         <div>
-          <%= word_attributes.label :name, style: "display: block" %>
-          <%= word_attributes.text_field :name, id: 'teste', :onkeyup => "GetValue(this.value)" %>
+          <%= word_attributes.hidden_field :name, id: 'new_words' %>
         </div>
     <% end %>
 
@@ -43,19 +40,12 @@
       <%= form.fields_for :phrase, Phrase.new do |phrase_attributes|%>
 
         <div>
-          <%= phrase_attributes.label :difficulty, style: "display: block" %>
-          <%= phrase_attributes.number_field :difficulty %>
-        </div>
-
-        <div>
-          <%= phrase_attributes.label :audio, style: "display: block" %>
-          <%= phrase_attributes.text_field :audio %>
+          <%= phrase_attributes.hidden_field :text, id: 'new_phrase' %>
         </div>
 
         <br>
       <% end %>
     </div>
-  <% end %>
 
   <div>
     <br>

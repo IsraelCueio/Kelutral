@@ -1,62 +1,103 @@
-
-    function GetValue(value,blur){
+    function GetValue(value,key,blur){
         $('#teste').val();
-
         let pattern = /[^A-zÀ-ú"'\s]/gi; //Pattern to be removed from the words array
         let sep_pattern = /[^A-zÀ-ú"']/gi; //Pattern to separate words in the array(includes white_space)
-        value = value.toLowerCase() //Make input lowercase
+        let trtd_value = value.toLowerCase() //Make input lowercase
 
         var words_JSON = "<%= @words_JSON.to_json %>"
-        words_JSON = words_JSON.replace(/&quot;/ig,'"');
-        words_JSON = JSON.parse(words_JSON)
-        let existent_words = []
-
         var phrases_JSON = "<%= @phrases_JSON.to_json %>"
-        phrases_JSON = phrases_JSON.replace(/&quot;/ig,'"');
-        phrases_JSON = JSON.parse(phrases_JSON)
-        let existent_phrases = []
-        let existent_word_ids = []
 
+        words_JSON = JsonParsing(words_JSON)
+        phrases_JSON = JsonParsing(phrases_JSON)
+
+        let existent_words = []
+        
         let last_char = value.slice(-1)
+
         //Separates the words by white_spaces or special signs(!%&#$ ...)
-        if ((last_char.match(pattern) != null) || (last_char == " ") || (blur == true)){
+        if ((last_char.match(pattern) != null) || (key.key == " ") || (blur == true) || (key.key === 'Enter')){
             
-            let full_phrase = value.trim()
-            //Treats the input for the entry into the words array
-            let trtd_value = full_phrase.split(sep_pattern)//Separate the array by special chars and white_spaces
-            trtd_value = trtd_value.filter(Boolean)//Remove blanck spaces
+            let full_phrase = trtd_value.trim()
+            //Treats the input for the words array
+            trtd_value = full_phrase.split(sep_pattern)//Separate the array by special chars and white_spaces
+            trtd_value = trtd_value.filter(Boolean)//Remove empty elements of the array
+            
             var terms = trtd_value
             console.log("words: " + terms);
             console.log("frase: " + full_phrase);
+            
+            //Creates the array of new words
             for(var i in words_JSON)
                 existent_words.push((words_JSON[i].name).toLowerCase())
             let new_words = terms.filter(x => !existent_words.includes(x))
-            console.log("Novas palavras: " + new_words)
+            new_words_json = []
+            for(var i = 0; i < new_words.length; i++){
+                new_words_json[i] = {}
+                new_words_json[i].name = new_words[i]
+            }
+            new_words_json = JSON.stringify(new_words_json)
+            console.log("Novas palavras: " + new_words_json)
+            $('#new_words').val(new_words_json)
 
-            for(var i = 0; i < terms.length; i++)
-                for(var j in words_JSON)
-                    if (terms[i] == (words_JSON[j].name).toLowerCase())
-                        existent_word_ids.push(words_JSON[j].id)
+            existent_word_ids = ExistentWords(terms,words_JSON)
+            existent_phrase_id = ExistentPhrases(full_phrase,phrases_JSON)
+            
+            if(existent_phrase_id == ""){
+                $('#new_phrase').val(full_phrase)
+                last_phrase_id = 0
+                for (var i = 0; i<phrases_JSON.length;i++){
+                    if (last_phrase_id < phrases_JSON[i].id){
+                        last_phrase_id = phrases_JSON[i].id
+                        
+                    }
+                }
+                existent_phrase_id = last_phrase_id + 1
+                console.log("existent_phrase_id: " + existent_phrase_id)
+            }
 
-            for(var i in phrases_JSON)
-                if((full_phrase.toLowerCase()) == (phrases_JSON[i].text.toLowerCase()))
-                    var existent_phrase_id = phrases_JSON[i].id 
-            WordJSON(existent_word_ids,existent_phrase_id)
+            ExistentExpresJSON(existent_word_ids,existent_phrase_id)
         }
         
         
     }
-    function WordJSON(existent_word_ids,existent_phrase_id){
+
+    function JsonParsing(json){
+            json = json.replace(/&quot;/ig,'"')
+            json = JSON.parse(json)
+            return json
+    }
+    
+    //Creates the array of existent words comparing every element
+    //of the Word table with the terms array, in order in the order of the phrase
+    function ExistentWords(terms,words_JSON){
+        let existent_word_ids = []
+        for(var i = 0; i < terms.length; i++)
+                for(var j in words_JSON)
+                    if (terms[i] == (words_JSON[j].name).toLowerCase())
+                        existent_word_ids.push(words_JSON[j].id)
+        return existent_word_ids
+    }
+
+    //Creates the array of existent phrases comparing every element 
+    //of the Phrase table with "full_phrase"
+    function ExistentPhrases(full_phrase,phrases_JSON){
+        let existent_phrase_id = []
+        for(var i in phrases_JSON)
+                if((full_phrase.toLowerCase()) == (phrases_JSON[i].text.toLowerCase()))
+                    existent_phrase_id = phrases_JSON[i].id
+        return existent_phrase_id
+    }
+    
+    //Generates the json of expressions for the already existent words and phrases
+    function ExistentExpresJSON(existent_word_ids,existent_phrase_id){
         var expression = []
 
-        console.log("existent_word_ids: " + existent_word_ids.length)
         for (var i = 0; i < existent_word_ids.length;i++){
             expression[i] = {}
             expression[i].word_id = existent_word_ids[i]
             expression[i].phrase_id = existent_phrase_id
         }
-        expressions = {}
-        expressions.expressions = expression
+
         expression = JSON.stringify(expression)
         console.log(expression)
 
