@@ -11,20 +11,54 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :word_id, style: "display: block" %>
-    <%= form.collection_select :word_id, Word.order(:id), :id, :name %>
-  </div>
+  <% if false %>
+    <div>
+      <%= form.label :word_id, style: "display: block" %>
+      <%= form.collection_select :word_id, Word.order(:id), :id, :name %>
+    </div>
+
+    <div>
+      <%= form.label :phrase_id, style: "display: block" %>
+      <%= form.collection_select :phrase_id, Phrase.order(:id), :id, :text %>
+    </div>
+
+  <% end %>
+
+      <label for="fname">Frase:</label>
+      <input type="text" id="teste" onkeyup="GetValue(this.value,false)" onblur="GetValue(this.value,true)"><br><br>
+
+      <div>
+        <%= form.hidden_field :word_json %>
+        <%= form.hidden_field :word_json, id: 'json_sender' %>
+      <div>
+  <% if false %>
+    <%= form.fields_for :word, Word.new do |word_attributes|%>
+        <div>
+          <%= word_attributes.label :name, style: "display: block" %>
+          <%= word_attributes.text_field :name, id: 'teste', :onkeyup => "GetValue(this.value)" %>
+        </div>
+    <% end %>
+
+    <div>
+      <%= form.fields_for :phrase, Phrase.new do |phrase_attributes|%>
+
+        <div>
+          <%= phrase_attributes.label :difficulty, style: "display: block" %>
+          <%= phrase_attributes.number_field :difficulty %>
+        </div>
+
+        <div>
+          <%= phrase_attributes.label :audio, style: "display: block" %>
+          <%= phrase_attributes.text_field :audio %>
+        </div>
+
+        <br>
+      <% end %>
+    </div>
+  <% end %>
 
   <div>
-    <%= form.label :phrase_id, style: "display: block" %>
-    <%= form.collection_select :phrase_id, Phrase.order(:id), :id, :text %>
-  </div>
-
-  
-  </div>
-
-  <div>
+    <br>
     <%= form.submit %>
   </div>
 <% end %>

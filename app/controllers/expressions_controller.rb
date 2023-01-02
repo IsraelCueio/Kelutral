@@ -18,6 +18,7 @@ class ExpressionsController < ApplicationController
   # GET /expressions/new
   def new
     @words_JSON = Word.all
+    @phrases_JSON = Phrase.all
     @expression = Expression.new
     @expression.build_phrase
     @expression.build_word
@@ -31,17 +32,25 @@ class ExpressionsController < ApplicationController
 
   # POST /expressions or /expressions.json
   def create
-    @expression = Expression.new(expression_params)
+    data = JSON.parse(params[:expression][:word_json])
 
-    respond_to do |format|
-      if @expression.save
-        format.html { redirect_to expressions_url, notice: "Expression was successfully created." }
-        format.json { render :show, status: :created, location: @expression }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @expression.errors, status: :unprocessable_entity }
-      end
+    data.each do |attributes|
+      Expression.create(attributes)
     end
+
+    redirect_to expressions_url
+    
+      #@expression = Expression.new(expression_params)
+      #respond_to do |format|
+      #  if @expression.save
+      #    format.html { redirect_to expressions_url, notice: "Expression was successfully created." }
+      #    format.json { render :show, status: :created, location: @expression }
+      #  else
+      #    format.html { render :new, status: :unprocessable_entity }
+      #    format.json { render json: @expression.errors, status: :unprocessable_entity }
+      #  end
+      #end
+    
   end
 
   # PATCH/PUT /expressions/1 or /expressions/1.json
@@ -75,6 +84,6 @@ class ExpressionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def expression_params
-      params.require(:expression).permit(:word_id, :phrase_id, phrase_attributes: [:difficulty, :audio, :text], word_attributes: [:name, :audio, :word_class_id])
+      params.permit(expression: [:word_json], phrase_attributes: [:difficulty, :audio, :text], word_attributes: [:name, :audio, :word_class_id]).require(:expression)
     end
 end
