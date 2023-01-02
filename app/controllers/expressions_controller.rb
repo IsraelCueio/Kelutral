@@ -35,10 +35,19 @@ class ExpressionsController < ApplicationController
     data = JSON.parse(params[:expression][:word_json])
 
     data.each do |attributes|
-      Expression.create(attributes)
+      @expression = Expression.new(attributes)
+      @expression.save
     end
 
-    redirect_to expressions_url
+    respond_to do |format|
+      if @expression.save
+        format.html { redirect_to expressions_url, notice: "Expression was successfully created." }
+        format.json { render :show, status: :created, location: @expression }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @expression.errors, status: :unprocessable_entity }
+      end
+    end
     
       #@expression = Expression.new(expression_params)
       #respond_to do |format|
