@@ -1,16 +1,35 @@
 <div id="<%= dom_id expression %>">
 
     <p>
-        <strong class="h3"> Phrase: </strong>  
-        <%= @phrases.find(expression.phrase_id).text %>
+        <span> Phrase: </span>
+        <br>
+        <strong class="h3">
+            <%= @phrases.find(expression.phrase_id).text %>
+        </strong>
     </p>
 
     <p>
-        <strong class="h5"> Words: </strong> 
+        <span> Phrase Translation: </span>  
+        <br>
+        <strong class="h5">
+            <%= (@phrase_translations.where(phrase_id: expression.phrase_id)).first.translation %>
+        </strong>    
+        <br>
+        <span> Difficulty: </span>
+        <br>
+        <strong class="h5">
+            <%= @phrases.find(expression.phrase_id).difficulty %>
+        </strong>
+    </p>
+
+    <p>
+        <span> Words: </span> 
+        <br>
         <% @phrase_expressions = @expressions.where(phrase_id: expression.phrase_id) %>
-        <% @phrase_expressions.each do |phrase_expression| %> 
-            <br>
-            <%= @words.find(phrase_expression.word_id).name %>
+        <% @phrase_expressions.each do |phrase_expression| %>
+            <span style="background-color: rgba(0,0,0,0.1);margin:3px;padding:2px 8px;border-radius: 10px">
+                <%= @words.find(phrase_expression.word_id).name %>
+            </span>
         <% end %>
     </p>
 

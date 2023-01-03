@@ -11,38 +11,43 @@
     </div>
   <% end %>
 
-  <% if false %>
-    <div>
-      <%= form.label :word_id, style: "display: block" %>
-      <%= form.collection_select :word_id, Word.order(:id), :id, :name %>
+  <div class="container mt-5" style="width:50vw; border-radius: 50px; box-shadow: 0px 10px 20px rgba(0,0,0,0.2); padding: 50px">
+    <div class="row">
+      <div class="col text-center">
+        <h1>New expression</h1>
+        <br>
+      </div>
     </div>
-
-    <div>
-      <%= form.label :phrase_id, style: "display: block" %>
-      <%= form.collection_select :phrase_id, Phrase.order(:id), :id, :text %>
+    <div class="row">
+      <div class="col-8">
+        <label>Phrase:</label>
+        <br>
+        <input type="text" class="form-control" id="teste" onkeydown="GetValue(this.value,event,false)" onblur="GetValue(this.value,event,true)">
+        <br>
+      </div>
+      <div class="col">
+        <label>Difficulty</label>
+        <br>
+        <%= form.select :difficulty, Phrase.difficulties.keys,{}, {class: "form-select"} %>
+      </div>
     </div>
-
-  <% end %>
-
-      <label for="fname">Frase:</label>
-      <input type="text" id="teste" onkeydown="GetValue(this.value,event,false)" onblur="GetValue(this.value,event,true)"><br><br>
-
+    <div class="row">
+      <div class="col">
+        <label for="fname">Phrase Translation:</label>
+        <br>
+        <%= form.text_field :translation,{class: "form-control"} %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col text-center">
         <div>
           <%= form.hidden_field :name, id: 'new_words' %>
-        </div>
-
-    <div>
-
-        <div>
           <%= form.hidden_field :text, id: 'new_phrase' %>
-        </div>
-
+        <div>
         <br>
+        <%= form.submit class: "btn btn-primary", style: "width: 100%!important" %>
+      </div>
     </div>
-
-  <div>
-    <br>
-    <%= form.submit %>
   </div>
 <% end %>
 <br>

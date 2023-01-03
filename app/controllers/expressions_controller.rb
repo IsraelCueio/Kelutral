@@ -6,6 +6,7 @@ class ExpressionsController < ApplicationController
     @expressions = Expression.all
     @phrases = Phrase.all
     @words = Word.all
+    @phrase_translations = PhraseTranslation.all
   end
 
   # GET /expressions/1 or /expressions/1.json
@@ -34,8 +35,9 @@ class ExpressionsController < ApplicationController
   def create
     
     new_phrase = params[:expression][:text]
-
+    phrase_translation = params[:expression][:translation]
     new_words = JSON.parse(params[:expression][:name])
+    difficulty = params[:expression][:difficulty]
     if new_words.any?
       new_words.each do |word|
         @word = Word.new(word)
@@ -43,7 +45,7 @@ class ExpressionsController < ApplicationController
       end
     end
 
-    new_phrase = {"text" => new_phrase,"difficulty" => 0}
+    new_phrase = {"text" => new_phrase,"difficulty" => difficulty}
     @phrase = Phrase.new(new_phrase)
     @phrase.save
 
@@ -66,6 +68,10 @@ class ExpressionsController < ApplicationController
         @phrase_id = phrase.id
       end
     end
+
+    phrase_translation = {"translation" => phrase_translation.downcase,"phrase_id" => @phrase_id}
+    @phrase_translation = PhraseTranslation.new(phrase_translation)
+    @phrase_translation.save
 
     @new_words.each do |word|
       expression_ids = {"word_id"=>word.first.id,"phrase_id"=>@phrase_id}
@@ -129,6 +135,6 @@ class ExpressionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def expression_params
-      params.permit(expression: [:name,:text]).require(:expression)
+      params.permit(expression: [:name,:text,:translation,:difficulty]).require(:expression)
     end
 end

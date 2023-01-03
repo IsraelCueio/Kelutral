@@ -16,7 +16,18 @@
 
  @import "bootstrap";
 
- select{
-    width: 80vw;
+ .form-select{
+   width: 100%;
+   border-radius: 25px;
+   height: 30px;
+   padding: 0px 10px;
+   background-color: white
  }
 
+ .form-control{
+   width: 100%;
+   border-radius: 25px;
+   height: 30px;
+   padding: 0px 10px;
+   background-color: white
+ }

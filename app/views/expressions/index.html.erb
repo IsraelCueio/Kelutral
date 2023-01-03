@@ -1,14 +1,22 @@
 <p style="color: green"><%= notice %></p>
 
-<h1>Expressions</h1>
+<h1 class="text-center">Expressions</h1>
 
 <div id="expressions">
   <% @expression_filter = @expressions.uniq{|expression| expression.phrase_id} %>
+  <div class="container">
+      <div class="row">
+          <%= button_to "New expression", new_expression_path, :method => :get, :class => "btn btn-primary" %>
+          <br>
+          <br>
   <% @expression_filter.each do |expression| %>
-    <%= render expression %>
-    <p>
-    </p>
+        <div class="col-4">
+          <div style="border-radius: 30px; box-shadow: 0px 5px 15px rgba(0,0,0,0.2); padding: 30px;margin:5px">
+            <%= render expression %>
+          </div>
+          <br>
+        </div>
   <% end %>
+  </div>
+    </div>
 </div>
-
-<%= link_to "New expression", new_expression_path %>

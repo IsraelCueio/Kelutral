@@ -13,7 +13,7 @@
 
   <div>
     <%= form.label :phrase_id, style: "display: block" %>
-    <%= form.collection_select :phrase_id, Phrase.order(:id), :id, :name %>
+    <%= form.collection_select :phrase_id, Phrase.order(:id), :id, :text %>
   </div>
 
   <div>
