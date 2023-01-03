@@ -25,18 +25,19 @@
             var terms = trtd_value
             console.log("words: " + terms);
             console.log("frase: " + full_phrase);
-            
             //Creates the array of new words
             for(var i in words_JSON)
                 existent_words.push((words_JSON[i].name).toLowerCase())
             let new_words = terms.filter(x => !existent_words.includes(x))
-            new_words_json = []
+            let new_words_json = []
+            console.log(new_words)
             for(var i = 0; i < new_words.length; i++){
                 new_words_json[i] = {}
                 new_words_json[i].name = new_words[i]
+                console.log("Novas palavras: " + new_words_json)
             }
             new_words_json = JSON.stringify(new_words_json)
-            console.log("Novas palavras: " + new_words_json)
+            
             $('#new_words').val(new_words_json)
 
             existent_word_ids = ExistentWords(terms,words_JSON)
@@ -101,5 +102,4 @@
         expression = JSON.stringify(expression)
         console.log(expression)
 
-        $('#json_sender').val(expression)
     }

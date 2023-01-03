@@ -76,3 +76,5 @@ gem "devise", "~> 4.8"
 gem "hotwire-rails", "~> 0.1.3"
 
 gem "bootstrap", "~> 5.2"
+
+gem "byebug"

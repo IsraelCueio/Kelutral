@@ -32,12 +32,48 @@ class ExpressionsController < ApplicationController
 
   # POST /expressions or /expressions.json
   def create
-    data = JSON.parse(params[:expression][:word_json])
+    
+    new_phrase = params[:expression][:text]
 
-    data.each do |attributes|
-      @expression = Expression.new(attributes)
+    new_words = JSON.parse(params[:expression][:name])
+    if new_words.any?
+      new_words.each do |word|
+        @word = Word.new(word)
+        @word.save
+      end
+    end
+
+    new_phrase = {"text" => new_phrase,"difficulty" => 0}
+    @phrase = Phrase.new(new_phrase)
+    @phrase.save
+
+
+    words_order = []
+    words_order = new_phrase["text"].downcase
+    words_order = words_order.split(/[^A-zÀ-ú"']/)
+    words_order.each_with_index do |term,index|
+      words_order[index] = term.gsub(/[^A-zÀ-ú"'\s]/, '')
+    end
+    words_order = words_order.reject { |w| w.empty?}
+
+    @new_words = []
+    words_order.each do |term|
+      @new_words.push((Word.all).where(name: term))
+    end
+
+    (Phrase.all).each do |phrase|
+      if phrase.text == new_phrase["text"]
+        @phrase_id = phrase.id
+      end
+    end
+
+    @new_words.each do |word|
+      expression_ids = {"word_id"=>word.first.id,"phrase_id"=>@phrase_id}
+      @expression = Expression.new(expression_ids)
       @expression.save
     end
+
+    
 
     respond_to do |format|
       if @expression.save
@@ -93,6 +129,6 @@ class ExpressionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def expression_params
-      params.permit(expression: [:word_json], phrase_attributes: [:difficulty, :audio, :text], word_attributes: [:name, :audio, :word_class_id]).require(:expression)
+      params.permit(expression: [:name,:text]).require(:expression)
     end
 end

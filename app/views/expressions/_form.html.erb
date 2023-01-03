@@ -27,24 +27,17 @@
       <label for="fname">Frase:</label>
       <input type="text" id="teste" onkeydown="GetValue(this.value,event,false)" onblur="GetValue(this.value,event,true)"><br><br>
 
-      <div>
-        <%= form.hidden_field :word_json, id: 'json_sender' %>
-      <div>
-    <%= form.fields_for :word, Word.new do |word_attributes|%>
         <div>
-          <%= word_attributes.hidden_field :name, id: 'new_words' %>
+          <%= form.hidden_field :name, id: 'new_words' %>
         </div>
-    <% end %>
 
     <div>
-      <%= form.fields_for :phrase, Phrase.new do |phrase_attributes|%>
 
         <div>
-          <%= phrase_attributes.hidden_field :text, id: 'new_phrase' %>
+          <%= form.hidden_field :text, id: 'new_phrase' %>
         </div>
 
         <br>
-      <% end %>
     </div>
 
   <div>
