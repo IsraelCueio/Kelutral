@@ -1,0 +1,19 @@
+<% unless @new_word.nil? %>
+    <%= fields_for @expression do |form| %>
+        <div class="row new-word mx-2">
+            <div class="col-auto">
+        
+                <span style="background-color: rgba(0,0,0,0.1);margin:3px;padding:2px 8px;border-radius: 10px">
+                    <%= @current_word %>
+                </span>:
+                
+            </div>
+            <div class="col-auto">
+                <span>
+                    <%= form.text_field :word_translation,{class: "form-control"} %>
+                </span>
+                <br>
+            </div>
+        </div>
+    <% end %>
+<% end %>

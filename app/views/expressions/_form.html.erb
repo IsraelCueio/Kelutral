@@ -31,6 +31,8 @@
         <%= form.select :difficulty, Phrase.difficulties.keys,{}, {class: "form-select"} %>
       </div>
     </div>
+    <%= csrf_meta_tag %>
+    <div id="word_translation"></div>
     <div class="row">
       <div class="col">
         <label for="fname">Phrase Translation:</label>

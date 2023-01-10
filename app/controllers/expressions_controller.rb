@@ -1,7 +1,9 @@
 class ExpressionsController < ApplicationController
+  respond_to :html, :js
   before_action :set_expression, only: %i[ show edit update destroy ]
 
   # GET /expressions or /expressions.json
+
   def index
     @expressions = Expression.all
     @phrases = Phrase.all
@@ -14,6 +16,26 @@ class ExpressionsController < ApplicationController
     @expressions = Expression.all
     @phrases = Phrase.all
     @words = Word.all
+  end
+
+  def word_translation
+    @new_word = (params[:new_word])
+    @new_word = @new_word.split(",")
+
+    if defined?(rendered) == nil
+      rendered = []
+    end
+
+    @new_word.each_with_index do |new_word,index|
+      if (rendered[index] != new_word)
+        rendered[index] = new_word
+        @current_word = rendered[index]
+      end
+    end
+    respond_to do |format|
+      format.js {render layout: false}
+      format.html { render partial: 'word_translation'}
+    end
   end
 
   # GET /expressions/new
@@ -135,6 +157,6 @@ class ExpressionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def expression_params
-      params.permit(expression: [:name,:text,:translation,:difficulty]).require(:expression)
+      params.permit(expression: [:name,:text,:translation,:difficulty,:new_word]).require(:expression)
     end
 end

@@ -1,0 +1,33 @@
+var new_words = []
+var new_words = <%= raw @new_word %>
+if ( typeof rendered == 'undefined'){
+    var rendered = [false]
+    $('#word_translation').prepend("<label>New Word Translations:</label><br>")
+}
+console.log('new_words: ' + new_words.length)
+for(var i = 0 ; i < (new_words.length) ; i++){
+    if (typeof rendered[i] == 'undefined'){
+        rendered[i] = false
+    }
+    if (rendered[i] == false){
+        console.log('why noooot?')
+        $('#word_translation').append("<%= j (render 'word_translation', object: @expression, as: 'expression') %>")
+        $('.new-word').last().slideUp(0);
+        $('.new-word').last().slideDown();
+        rendered[i] = new_words[i]
+    }
+}
+
+console.log('rendered: ' + rendered)
+console.log('new_words: ' + new_words)
+
+for (var j = 0 ; j < rendered.length ; j++){
+    if (rendered[j] != new_words[j]){
+        $('.new-word').eq(j).remove()
+        $('.new-word').eq(j-1).after("<%= j (render 'word_translation', object: @expression, as: 'expression') %>")
+        $('.new-word').eq(j-1).slideUp(0);
+        $('.new-word').eq(j-1).slideDown();
+        rendered[j] = new_words[j]
+    }
+}
+

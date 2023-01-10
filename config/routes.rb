@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     sessions: 'users/sessions',
     registrations: 'users/registrations',    
   }
+  post 'expressions/word_translation/:new_word' => 'expressions#word_translation'
   resources :reports
   resources :sections
   resources :lists

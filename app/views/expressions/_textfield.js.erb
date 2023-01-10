@@ -1,4 +1,4 @@
-    function GetValue(value,key,blur){
+function GetValue(value,key,blur){
         $('#teste').val();
         let pattern = /[^A-zÀ-ú"'\s]/gi; //Pattern to be removed from the words array
         let sep_pattern = /[^A-zÀ-ú"']/gi; //Pattern to separate words in the array(includes white_space)
@@ -12,10 +12,15 @@
 
         let existent_words = []
         
-        let last_char = value.slice(-1)
+        let last_char = key.key
+        if (last_char == undefined){
+            last_char = ''
+        }
+        console.log("last_char: " + value.slice(-1))
+        console.log(last_char)
 
         //Separates the words by white_spaces or special signs(!%&#$ ...)
-        if ((last_char.match(pattern) != null) || (key.key == " ") || (blur == true) || (key.key === 'Enter')){
+        if (((last_char).match(pattern) != null) || (key.key == " ") || (blur == true) || (key.key === 'Enter')){
             
             let full_phrase = trtd_value.trim()
             //Treats the input for the words array
@@ -57,6 +62,37 @@
             }
 
             ExistentExpresJSON(existent_word_ids,existent_phrase_id)
+            
+
+            if (terms[(terms.length) -1] == new_words[(new_words.length) -1]){
+                new_word = new_words[(new_words.length) -1]
+                jQuery.ajax({
+                    method: "POST",
+                    data: {new_word: new_words},
+                    headers: {'X-CSRF-Token': '<%= form_authenticity_token.to_s %>'},
+                    url: '/expressions/word_translation/' + new_words,
+                    success: function(data){
+                        console.log("json funfooou")
+                        if(new_words.length >= 1){
+                        }
+                    }
+                })
+                
+            }
+            else {
+                new_word = ""
+                jQuery.ajax({
+                    method: "POST",
+                    data: {new_word: new_words},
+                    headers: {'X-CSRF-Token': '<%= form_authenticity_token.to_s %>'},
+                    url: '/expressions/word_translation/' + new_words,
+                    success: function(data){
+                        console.log("json funfooou")
+                        if(new_words.length >= 1){
+                        }
+                    }
+                })
+            }
         }
         
         
