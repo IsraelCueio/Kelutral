@@ -1,33 +1,54 @@
+console.log('Entered word_translation.js.erb')
+
 var new_words = []
 var new_words = <%= raw @new_word %>
-if ( typeof rendered == 'undefined'){
-    var rendered = [false]
-    $('#word_translation').prepend("<label>New Word Translations:</label><br>")
+if (typeof new_words[0] == 'undefined'){
+    new_words[0] = new_words
+    
+} 
+
+if(typeof rendered == 'undefined' || new_words == '' ){
+    rendered = null
 }
-console.log('new_words: ' + new_words.length)
+
+if ( new_words != '' && rendered == null){
+    var rendered = [false]
+    $('#word_translation').prepend('<label id="new-word-label">New Word Translations:<br></label>')
+}
+console.log('new_words.length: ' + new_words.length)
 for(var i = 0 ; i < (new_words.length) ; i++){
     if (typeof rendered[i] == 'undefined'){
         rendered[i] = false
     }
+
+    console.log('rendered: ' + rendered)
+    console.log('new_words: ' + new_words)
+    for (var j = 0 ; j < rendered.length ; j++){
+        if (rendered[j] != new_words[j] && rendered[j] != false && typeof new_words[j] != 'undefined' ){
+            $('.new-word').eq(j).before("<%= j (render 'word_translation', object: @expression, as: 'expression') %>")
+            $('.new-word').eq(j).slideUp(0);
+            $('.new-word').eq(j+1).remove()
+            $('.new-word').eq(j).slideDown();
+            rendered[j] = new_words[j]
+            console.log('Replaced new word')
+        }
+        if (rendered[j] != new_words[j] && rendered[j] != false && typeof new_words[j] == 'undefined' ){
+            $('.new-word').eq(j).slideUp(function() {$(this).remove();});
+            rendered[j] = false
+            console.log('Removed new word')
+        }
+    }
+
     if (rendered[i] == false){
         console.log('why noooot?')
         $('#word_translation').append("<%= j (render 'word_translation', object: @expression, as: 'expression') %>")
         $('.new-word').last().slideUp(0);
         $('.new-word').last().slideDown();
         rendered[i] = new_words[i]
+        console.log('Rendered new word')
     }
 }
 
 console.log('rendered: ' + rendered)
 console.log('new_words: ' + new_words)
-
-for (var j = 0 ; j < rendered.length ; j++){
-    if (rendered[j] != new_words[j]){
-        $('.new-word').eq(j).remove()
-        $('.new-word').eq(j-1).after("<%= j (render 'word_translation', object: @expression, as: 'expression') %>")
-        $('.new-word').eq(j-1).slideUp(0);
-        $('.new-word').eq(j-1).slideDown();
-        rendered[j] = new_words[j]
-    }
-}
 

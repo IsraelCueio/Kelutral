@@ -16,10 +16,11 @@ function GetValue(value,key,blur){
         if (last_char == undefined){
             last_char = ''
         }
-        console.log("last_char: " + value.slice(-1))
-        console.log(last_char)
+
+        console.log("value: " + value)
 
         //Separates the words by white_spaces or special signs(!%&#$ ...)
+        
         if (((last_char).match(pattern) != null) || (key.key == " ") || (blur == true) || (key.key === 'Enter')){
             
             let full_phrase = trtd_value.trim()
@@ -35,11 +36,9 @@ function GetValue(value,key,blur){
                 existent_words.push((words_JSON[i].name).toLowerCase())
             let new_words = terms.filter(x => !existent_words.includes(x))
             let new_words_json = []
-            console.log(new_words)
             for(var i = 0; i < new_words.length; i++){
                 new_words_json[i] = {}
                 new_words_json[i].name = new_words[i]
-                console.log("Novas palavras: " + new_words_json)
             }
             new_words_json = JSON.stringify(new_words_json)
             
@@ -58,13 +57,15 @@ function GetValue(value,key,blur){
                     }
                 }
                 existent_phrase_id = last_phrase_id + 1
-                console.log("existent_phrase_id: " + existent_phrase_id)
             }
 
             ExistentExpresJSON(existent_word_ids,existent_phrase_id)
             
-
-            if (terms[(terms.length) -1] == new_words[(new_words.length) -1]){
+            if(typeof rendered == 'undefined'){
+                rendered = null
+            }
+            console.log(new_words)
+            if (rendered != new_words && new_words.length > 0){
                 new_word = new_words[(new_words.length) -1]
                 jQuery.ajax({
                     method: "POST",
@@ -79,19 +80,13 @@ function GetValue(value,key,blur){
                 })
                 
             }
-            else {
-                new_word = ""
-                jQuery.ajax({
-                    method: "POST",
-                    data: {new_word: new_words},
-                    headers: {'X-CSRF-Token': '<%= form_authenticity_token.to_s %>'},
-                    url: '/expressions/word_translation/' + new_words,
-                    success: function(data){
-                        console.log("json funfooou")
-                        if(new_words.length >= 1){
-                        }
-                    }
-                })
+
+            if(typeof rendered != undefined && new_words.length == 0){
+                $('#new-word-label').slideUp(function() {$(this).remove();})
+                for (var i = 0 ; i < rendered.length ; i++){
+                    $('.new-word').eq(i).slideUp(function() {$(this).remove();})
+                }
+                rendered = [false]
             }
         }
         
@@ -136,6 +131,5 @@ function GetValue(value,key,blur){
         }
 
         expression = JSON.stringify(expression)
-        console.log(expression)
 
     }
