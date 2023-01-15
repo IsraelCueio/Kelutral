@@ -80,11 +80,10 @@ function GetValue(value,key,blur){
         ExistentExpresJSON(existent_word_ids,existent_phrase_id)
         
         if(typeof rendered == 'undefined'){
-            rendered = null
+            rendered = []
         }
-        console.log(new_words)
-        if (rendered != new_words && new_words.length > 0){
-            new_word = new_words[(new_words.length) -1]
+        console.log('rendered: ' + rendered)
+        if ((rendered.sort().join(',') != new_words.sort().join(',')) && new_words.length > 0){
             jQuery.ajax({
                 method: "POST",
                 data: {new_word: new_words},
@@ -104,7 +103,7 @@ function GetValue(value,key,blur){
             for (var i = 0 ; i < rendered.length ; i++){
                 $('.new-word').eq(i).slideUp(function() {$(this).remove();})
             }
-            rendered = null
+            rendered = []
         }
     }
 

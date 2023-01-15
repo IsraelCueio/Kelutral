@@ -19,19 +19,9 @@ class ExpressionsController < ApplicationController
   end
 
   def word_translation
-    @new_word = (params[:new_word])
+    @new_word = params[:new_word]
     @new_word = @new_word.split(",")
 
-    if defined?(rendered) == nil
-      rendered = []
-    end
-
-    @new_word.each_with_index do |new_word,index|
-      if (rendered[index] != new_word)
-        rendered[index] = new_word
-        @current_word = rendered[index]
-      end
-    end
     respond_to do |format|
       format.js {render layout: false}
       format.html { render partial: 'word_translation'}
@@ -47,6 +37,7 @@ class ExpressionsController < ApplicationController
     @expression.build_word
     @phrases = Phrase.all
     @words = Word.all
+    @word_translations = WordTranslation.all
   end
 
   # GET /expressions/1/edit
@@ -55,17 +46,35 @@ class ExpressionsController < ApplicationController
 
   # POST /expressions or /expressions.json
   def create
+    rendered_words = JSON.parse(params[:expression][:render])
     
     new_phrase = params[:expression][:text]
     phrase_translation = params[:expression][:translation]
     new_words = JSON.parse(params[:expression][:name])
     difficulty = params[:expression][:difficulty]
+    word_translations = params[:word_translation]
+
     if new_words.any?
       new_words.each do |word|
         @word = Word.new(word)
         @word.save
       end
     end
+
+    word_translations.each_with_index do |word_translation,index|
+      (Word.all).each do |word|
+        if rendered_words[index]["rendered_word"] == word.name
+          word_translation_params = {}
+          word_translation_params["translation"] = word_translation
+          word_translation_params["word_id"] = word.id
+          
+          @word_translation = WordTranslation.new(word_translation_params)
+          @word_translation.save
+        end
+      end
+    end
+
+    
 
     new_phrase = {"text" => new_phrase,"difficulty" => difficulty}
     @phrase = Phrase.new(new_phrase)
@@ -157,6 +166,6 @@ class ExpressionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def expression_params
-      params.permit(expression: [:name,:text,:translation,:difficulty,:new_word]).require(:expression)
+      params.permit(expression: [:name,:text,:translation,:difficulty,:new_word,:word_translation,:render]).require(:expression)
     end
 end

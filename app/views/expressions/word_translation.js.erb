@@ -3,8 +3,7 @@ console.log('Entered word_translation.js.erb')
 var new_words = []
 var new_words = <%= raw @new_word %>
 
-if ( new_words.length > 0 && rendered == null){
-    var rendered = []
+if ( new_words.length > 0 && rendered == []){
     $('#word_translation').prepend('<label id="new-word-label">New Word Translations:<br></label>')
 }
 console.log('new_words.length: ' + new_words.length)
@@ -44,6 +43,17 @@ if (new_words.every(elem => rendered.includes(elem)) == true){
         }
     }
 }
+
+rendered_json = []
+
+for (var i = 0 ; i < rendered.length ; i++ ) {
+    rendered_json[i] = {}
+    rendered_json[i].rendered_word = rendered[i]
+}
+rendered_json = JSON.stringify(rendered_json)
+console.log('rendered_json: ' + rendered_json)
+$('#rendered_new').val(rendered_json)
+
 
 
 
