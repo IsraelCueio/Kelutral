@@ -21,76 +21,91 @@ function GetValue(value,key,blur){
 
         //Separates the words by white_spaces or special signs(!%&#$ ...)
         
+        if(typeof typingTimer != 'undefined'){
+            clearTimeout(typingTimer);
+        }
+        typingTimer = setTimeout(doneTyping,500)
+
+        function doneTyping () {
+                console.log("tadaaa")
+                WordDetected(trtd_value,sep_pattern,pattern,words_JSON,existent_words,phrases_JSON)
+        }
+
         if (((last_char).match(pattern) != null) || (key.key == " ") || (blur == true) || (key.key === 'Enter')){
             
-            let full_phrase = trtd_value.trim()
-            //Treats the input for the words array
-            trtd_value = full_phrase.split(sep_pattern)//Separate the array by special chars and white_spaces
-            trtd_value = trtd_value.filter(Boolean)//Remove empty elements of the array
-            
-            var terms = trtd_value
-            console.log("words: " + terms);
-            console.log("frase: " + full_phrase);
-            //Creates the array of new words
-            for(var i in words_JSON)
-                existent_words.push((words_JSON[i].name).toLowerCase())
-            let new_words = terms.filter(x => !existent_words.includes(x))
-            let new_words_json = []
-            for(var i = 0; i < new_words.length; i++){
-                new_words_json[i] = {}
-                new_words_json[i].name = new_words[i]
-            }
-            new_words_json = JSON.stringify(new_words_json)
-            
-            $('#new_words').val(new_words_json)
-
-            existent_word_ids = ExistentWords(terms,words_JSON)
-            existent_phrase_id = ExistentPhrases(full_phrase,phrases_JSON)
-            
-            if(existent_phrase_id == ""){
-                $('#new_phrase').val(full_phrase)
-                last_phrase_id = 0
-                for (var i = 0; i<phrases_JSON.length;i++){
-                    if (last_phrase_id < phrases_JSON[i].id){
-                        last_phrase_id = phrases_JSON[i].id
-                        
-                    }
-                }
-                existent_phrase_id = last_phrase_id + 1
-            }
-
-            ExistentExpresJSON(existent_word_ids,existent_phrase_id)
-            
-            if(typeof rendered == 'undefined'){
-                rendered = null
-            }
-            console.log(new_words)
-            if (rendered != new_words && new_words.length > 0){
-                new_word = new_words[(new_words.length) -1]
-                jQuery.ajax({
-                    method: "POST",
-                    data: {new_word: new_words},
-                    headers: {'X-CSRF-Token': '<%= form_authenticity_token.to_s %>'},
-                    url: '/expressions/word_translation/' + new_words,
-                    success: function(data){
-                        console.log("json funfooou")
-                        if(new_words.length >= 1){
-                        }
-                    }
-                })
-                
-            }
-
-            if(typeof rendered != undefined && new_words.length == 0){
-                $('#new-word-label').slideUp(function() {$(this).remove();})
-                for (var i = 0 ; i < rendered.length ; i++){
-                    $('.new-word').eq(i).slideUp(function() {$(this).remove();})
-                }
-                rendered = null
-            }
+            WordDetected(trtd_value,sep_pattern,pattern,words_JSON,existent_words,phrases_JSON)
+            clearTimeout(typingTimer);
         }
         
         
+    }
+
+    function WordDetected(trtd_value,sep_pattern,pattern,words_JSON,existent_words,phrases_JSON){
+        let full_phrase = trtd_value.trim()
+        //Treats the input for the words array
+        trtd_value = full_phrase.split(sep_pattern)//Separate the array by special chars and white_spaces
+        trtd_value = trtd_value.filter(Boolean)//Remove empty elements of the array
+        
+        var terms = trtd_value
+        console.log("words: " + terms);
+        console.log("frase: " + full_phrase);
+        //Creates the array of new words
+        for(var i in words_JSON)
+            existent_words.push((words_JSON[i].name).toLowerCase())
+        let new_words = terms.filter(x => !existent_words.includes(x))
+        let new_words_json = []
+        for(var i = 0; i < new_words.length; i++){
+            new_words_json[i] = {}
+            new_words_json[i].name = new_words[i]
+        }
+        new_words_json = JSON.stringify(new_words_json)
+        
+        $('#new_words').val(new_words_json)
+
+        existent_word_ids = ExistentWords(terms,words_JSON)
+        existent_phrase_id = ExistentPhrases(full_phrase,phrases_JSON)
+        
+        if(existent_phrase_id == ""){
+            $('#new_phrase').val(full_phrase)
+            last_phrase_id = 0
+            for (var i = 0; i<phrases_JSON.length;i++){
+                if (last_phrase_id < phrases_JSON[i].id){
+                    last_phrase_id = phrases_JSON[i].id
+                    
+                }
+            }
+            existent_phrase_id = last_phrase_id + 1
+        }
+
+        ExistentExpresJSON(existent_word_ids,existent_phrase_id)
+        
+        if(typeof rendered == 'undefined'){
+            rendered = null
+        }
+        console.log(new_words)
+        if (rendered != new_words && new_words.length > 0){
+            new_word = new_words[(new_words.length) -1]
+            jQuery.ajax({
+                method: "POST",
+                data: {new_word: new_words},
+                headers: {'X-CSRF-Token': '<%= form_authenticity_token.to_s %>'},
+                url: '/expressions/word_translation/' + new_words,
+                success: function(data){
+                    console.log("json funfooou")
+                    if(new_words.length >= 1){
+                    }
+                }
+            })
+            
+        }
+
+        if(typeof rendered != undefined && new_words.length == 0){
+            $('#new-word-label').slideUp(function() {$(this).remove();})
+            for (var i = 0 ; i < rendered.length ; i++){
+                $('.new-word').eq(i).slideUp(function() {$(this).remove();})
+            }
+            rendered = null
+        }
     }
 
     function JsonParsing(json){
