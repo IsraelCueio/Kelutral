@@ -21,11 +21,14 @@ if ((rendered.every(elem => new_words.includes(elem)) == true) || (rendered.leng
             $('.word-name').eq(j).append(new_words[i])
             $('.new-word').last().slideUp(0);
             $('.new-word').last().slideDown();
-            rendered[j] = new_words[i]
+            rendered.push(new_words[i])
             console.log('Rendered new word')
         }
     }
 }
+
+console.log('rendered: ' + rendered)
+console.log('new_words: ' + new_words)
 
 if (new_words.every(elem => rendered.includes(elem)) == true){
     for (var i = 0 ; i < rendered.length ; i++){
@@ -36,6 +39,7 @@ if (new_words.every(elem => rendered.includes(elem)) == true){
             }
         }
         if (existent == false){
+            console.log('i to be excluded: ' + i)
             $('.new-word').eq(i).slideUp(function() {$(this).remove();});
             rendered[i] = ''
             rendered = rendered.filter(Boolean)

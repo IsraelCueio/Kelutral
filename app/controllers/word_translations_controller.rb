@@ -24,7 +24,6 @@ class WordTranslationsController < ApplicationController
 
   # POST /word_translations or /word_translations.json
   def create
-    byebug
     @word_translation = WordTranslation.new(word_translation_params)
 
     respond_to do |format|

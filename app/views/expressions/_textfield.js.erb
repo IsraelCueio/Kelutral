@@ -11,8 +11,8 @@ function GetValue(value,key,blur){
         phrases_JSON = JsonParsing(phrases_JSON)
 
         let existent_words = []
-        
         let last_char = key.key
+        
         if (last_char == undefined){
             last_char = ''
         }
@@ -24,16 +24,31 @@ function GetValue(value,key,blur){
         if(typeof typingTimer != 'undefined'){
             clearTimeout(typingTimer);
         }
+
         typingTimer = setTimeout(doneTyping,500)
 
         function doneTyping () {
                 console.log("tadaaa")
-                WordDetected(trtd_value,sep_pattern,pattern,words_JSON,existent_words,phrases_JSON)
+                WordDetected(
+                    trtd_value,
+                    sep_pattern,
+                    pattern,
+                    words_JSON,
+                    existent_words,
+                    phrases_JSON
+                )
         }
 
         if (((last_char).match(pattern) != null) || (key.key == " ") || (blur == true) || (key.key === 'Enter')){
             
-            WordDetected(trtd_value,sep_pattern,pattern,words_JSON,existent_words,phrases_JSON)
+            WordDetected(
+                trtd_value,
+                sep_pattern,
+                pattern,
+                words_JSON,
+                existent_words,
+                phrases_JSON
+            )
             clearTimeout(typingTimer);
         }
         

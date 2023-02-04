@@ -18,7 +18,7 @@
 
   <div>
     <%= form.label :difficulty, style: "display: block" %>
-    <%= form.number_field :difficulty %>
+    <%= form.select :difficulty, Phrase.difficulties.keys,{}, {class: "form-select"} %>
   </div>
 
   <div>
